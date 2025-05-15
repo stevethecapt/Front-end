@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Login</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    margin: 0;
+    display: flex;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+    color: #333;
+  }
+  .container {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+    max-width: 400px;
+    width: 90%;
+    padding: 40px 30px;
+    position: relative;
+  }
+  h2 {
+    margin-bottom: 24px;
+    font-weight: 600;
+    text-align: center;
+    color: #4a4a4a;
+  }
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+  label {
+    font-size: 0.9rem;
+    margin-bottom: 6px;
+    color: #555;
+  }
+  input[type="text"],
+  input[type="email"],
+  input[type="password"] {
+    padding: 10px 14px;
+    margin-bottom: 18px;
+    border: 1.8px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+  }
+  input[type="text"]:focus,
+  input[type="email"]:focus,
+  input[type="password"]:focus {
+    border-color: #667eea;
+    outline: none;
+  }
+  button {
+    background: #667eea;
+    color: #fff;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    padding: 12px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.3s;
+  }
+  button:hover {
+    background: #5564d2;
+  }
+  .toggle-link {
+    margin-top: 16px;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #667eea;
+    cursor: pointer;
+    user-select: none;
+  }
+  .toggle-link:hover {
+    text-decoration: underline;
+  }
+  .error-message {
+    color: #e53e3e;
+    font-size: 0.85rem;
+    margin-top: -14px;
+    margin-bottom: 14px;
+  }
+  .g-recaptcha {
+    margin: 12px 0 18px 0;
+  }
+</style>
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+</head>
+<body>
+  <div class="container">
+    <h2>Login</h2>
+    <form id="login-form" novalidate>
+      <label for="login-email">Email</label>
+      <input type="email" id="login-email" name="email" placeholder="you@example.com" required />
+      <div class="error-message" id="login-email-error"></div>
+
+      <label for="login-password">Password</label>
+      <input type="password" id="login-password" name="password" placeholder="Enter your password" required minlength="6" />
+      <div class="error-message" id="login-password-error"></div>
+
+      <!-- reCAPTCHA widget for login -->
+      <div class="g-recaptcha" data-sitekey="YOUR_SITE_KEY_HERE" id="login-recaptcha"></div>
+      <div class="error-message" id="login-recaptcha-error"></div>
+
+      <button type="submit">Login</button>
+      <div class="toggle-link" id="show-register" onclick="window.location.href='regist.html'">Don't have an account? Register</div>
+    </form>
+  </div>
+
+<script>
+  const loginForm = document.getElementById('login-form');
+
+  function clearErrors(form) {
+    const errors = form.querySelectorAll('.error-message');
+    errors.forEach(e => e.textContent = '');
+  }
+  function validateEmail(email) {
+    const re = /^[\\w-.]+@[\\w-]+\\.[a-z]{2,7}$/i;
+    return re.test(email);
+  }
+  let loginRecaptchaWidgetId;
+  window.onload = function() {
+    if (grecaptcha) {
+      loginRecaptchaWidgetId = grecaptcha.render('login-recaptcha', {
+        'sitekey': 'YOUR_SITE_KEY_HERE'
+      });
+    }
+  };
+
+  loginForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    clearErrors(loginForm);
+
+    let valid = true;
+    const email = loginForm['email'].value.trim();
+    const password = loginForm['password'].value;
+    const recaptchaResponse = grecaptcha.getResponse(loginRecaptchaWidgetId);
+
+    if (!email) {
+      document.getElementById('login-email-error').textContent = 'Email is required.';
+      valid = false;
+    } else if (!validateEmail(email)) {
+      document.getElementById('login-email-error').textContent = 'Invalid email format.';
+      valid = false;
+    }
+
+    if (!password) {
+      document.getElementById('login-password-error').textContent = 'Password is required.';
+      valid = false;
+    } else if (password.length < 6) {
+      document.getElementById('login-password-error').textContent = 'Password must be at least 6 characters.';
+      valid = false;
+    }
+
+    if (!recaptchaResponse) {
+      document.getElementById('login-recaptcha-error').textContent = 'Please complete the reCAPTCHA.';
+      valid = false;
+    }
+
+    if (valid) {
+      alert(`Login successful!\\nEmail: ${email}`);
+      loginForm.reset();
+      grecaptcha.reset(loginRecaptchaWidgetId);
+    }
+  });
+</script>
+</body>
+</html>
+
