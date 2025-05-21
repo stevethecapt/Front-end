@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Daftar Antrian Online Rumah Sakit</title>
+</head>
+<body>
+  <header>Daftar Antrian Online Rumah Sakit</header>
+  <main>
+    <div class="queue-cards" id="queueCardsContainer" aria-live="polite" aria-label="Daftar antrian pasien rumah sakit">
+    </div>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+  <script>
+    const queueData = [
+      {
+        nomorAntrian: "A001",
+        namaLengkap: "Siti Aminah",
+        nik: "3201123456789012",
+        tanggalLahir: "1985-06-12",
+        jenisKelamin: "Perempuan",
+        alamat: "Jl. Melati No 12, Jakarta",
+        nomorKontak: "+628123456789",
+        nomorRekamMedis: "RM-20200123",
+        keluhanUtama: "Sakit kepala berkelanjutan dan demam ringan selama 2 hari terakhir",
+        poliTujuan: "Umum",
+        dokterTujuan: "Dr. Budi Santoso",
+        tanggalJanji: "2024-06-28T10:30",
+        metodePembayaran: "BPJS",
+        statusAntrian: "Menunggu",
+        waktuPendaftaran: "2024-06-25 08:45:12",
+        token: "A001-3201123456789012"
+      },
+      {
+        nomorAntrian: "B102",
+        namaLengkap: "Rudi Hartono",
+        nik: "",
+        tanggalLahir: "1990-11-05",
+        jenisKelamin: "Laki-laki",
+        alamat: "Jl. Kenanga 45, Bandung",
+        nomorKontak: "+628987654321",
+        nomorRekamMedis: "",
+        keluhanUtama: "",
+        poliTujuan: "Gigi",
+        dokterTujuan: "Drg. Maria Febriani",
+        tanggalJanji: "2024-06-28T09:00",
+        metodePembayaran: "Pribadi",
+        statusAntrian: "Dipanggil",
+        waktuPendaftaran: "2024-06-25 09:05:10",
+        token: "B102-RH1990"
+      },
+      {
+        nomorAntrian: "A015",
+        namaLengkap: "Andi Wijaya",
+        nik: "3201234567890123",
+        tanggalLahir: "1978-02-14",
+        jenisKelamin: "Laki-laki",
+        alamat: "Jl. Durian 7, Surabaya",
+        nomorKontak: "+6281122334455",
+        nomorRekamMedis: "RM-20180712",
+        keluhanUtama: "Demam tinggi dan nyeri otot",
+        poliTujuan: "Anak",
+        dokterTujuan: "Dr. Maria Indah",
+        tanggalJanji: "2024-06-29T11:45",
+        metodePembayaran: "Asuransi",
+        statusAntrian: "Selesai",
+        waktuPendaftaran: "2024-06-24 16:30:40",
+        token: "A015-3201234567890123"
+      },
+      {
+        nomorAntrian: "C008",
+        namaLengkap: "Lilis Mulyani",
+        nik: "3201012345678901",
+        tanggalLahir: "2000-08-22",
+        jenisKelamin: "Perempuan",
+        alamat: "Jl. Mawar 9, Yogyakarta",
+        nomorKontak: "+6283344556677",
+        nomorRekamMedis: "",
+        keluhanUtama: "Nyeri gigi sebelah kiri bawah",
+        poliTujuan: "Gigi",
+        dokterTujuan: "Drg. Iqbal Pratama",
+        tanggalJanji: "2024-06-30T13:30",
+        metodePembayaran: "BPJS",
+        statusAntrian: "Batal",
+        waktuPendaftaran: "2024-06-26 12:10:55",
+        token: "C008-LM2000"
+      }
+    ];
+    function formatDateTime(dateTimeStr) {
+      if (!dateTimeStr) return "-";
+      const d = new Date(dateTimeStr);
+      if (isNaN(d)) return "-";
+      return d.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }) + ' ' +
+             d.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+    }
+    function createTruncatedText(text, maxLength) {
+      if (!text) return "-";
+      if (text.length <= maxLength) {
+        return escapeHtml(text);
+      }
+      const truncated = escapeHtml(text.slice(0, maxLength - 3)) + '...';
+      return `<span title="${escapeHtml(text)}">${truncated}</span>`;
+    }
+    function escapeHtml(text) {
+      return text.replace(/[&<>"']/g, (m) => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      })[m]);
+    }
+    function renderQueueCards() {
+      const container = document.getElementById('queueCardsContainer');
+      container.innerHTML = '';
+
+      queueData.forEach(data => {
+        const card = document.createElement('article');
+        card.className = 'queue-card';
+        card.setAttribute('tabindex', '0');
+        card.setAttribute('aria-label', `Nomor antrian ${data.nomorAntrian}, pasien ${data.namaLengkap}, status ${data.statusAntrian}`);
+
+        card.innerHTML = `
+          <header class="queue-header">
+            <div class="queue-number" aria-label="Nomor antrian">${escapeHtml(data.nomorAntrian)}</div>
+            <div class="status-badge status-${escapeHtml(data.statusAntrian)}">${escapeHtml(data.statusAntrian)}</div>
+          </header>
+          <h2 class="patient-name">${escapeHtml(data.namaLengkap)}</h2>
+          <section class="patient-info" aria-label="Detail pasien">
+            <div><strong class="info-label">NIK:</strong> ${createTruncatedText(data.nik || '-', 21)}</div>
+            <div><strong class="info-label">Tanggal Lahir:</strong> ${formatDateTime(data.tanggalLahir)}</div>
+            <div><strong class="info-label">Jenis Kelamin:</strong> ${escapeHtml(data.jenisKelamin)}</div>
+            <div class="info-full" title="${escapeHtml(data.alamat)}"><strong class="info-label">Alamat:</strong> ${createTruncatedText(data.alamat, 50)}</div>
+            <div><strong class="info-label">Kontak:</strong> ${escapeHtml(data.nomorKontak)}</div>
+            <div><strong class="info-label">Nomor Rekam Medis:</strong> ${createTruncatedText(data.nomorRekamMedis || '-', 20)}</div>
+            <div class="info-full" title="${escapeHtml(data.keluhanUtama)}"><strong class="info-label">Keluhan Utama:</strong> ${createTruncatedText(data.keluhanUtama || '-', 70)}</div>
+            <div><strong class="info-label">Poli Tujuan:</strong> ${escapeHtml(data.poliTujuan)}</div>
+            <div><strong class="info-label">Dokter Tujuan:</strong> ${escapeHtml(data.dokterTujuan)}</div>
+            <div><strong class="info-label">Janji Temu:</strong> ${formatDateTime(data.tanggalJanji)}</div>
+            <div><strong class="info-label">Metode Pembayaran:</strong> ${escapeHtml(data.metodePembayaran)}</div>
+            <div><strong class="info-label">Waktu Pendaftaran:</strong> ${escapeHtml(data.waktuPendaftaran)}</div>
+          </section>
+          <section class="qr-code-wrapper" aria-label="Kode QR atau Token Antrian">
+            <div id="qr-${data.nomorAntrian}" class="qr-code" role="img" aria-hidden="true" title="QR Code token untuk antrian"></div>
+          </section>
+        `;
+        container.appendChild(card);
+        if (data.token) {
+          const qrDiv = document.getElementById(`qr-${data.nomorAntrian}`);
+          if (qrDiv) {
+            QRCode.toCanvas(qrDiv, data.token, { width: 110, margin: 0 }, error => {
+              if (error) console.error(error);
+            });
+          }
+        }
+      });
+    }
+    renderQueueCards();
+  </script>
+</body>
+</html>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: linear-gradient(135deg, #d6e0fd, #f9fbff);
+      font-family: 'Poppins', sans-serif;
+      color: #222;
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    header {
+      font-size: 2.4rem;
+      font-weight: 700;
+      color: #1a3c72;
+      text-align: center;
+      margin-bottom: 40px;
+      text-shadow: 0 1px 3px rgba(26, 60, 114, 0.4);
+      user-select: none;
+    }
+
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .queue-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+    }
+    .queue-card {
+      background: white;
+      border-radius: 16px;
+      box-shadow:
+        0 8px 24px rgba(26, 60, 114, 0.1),
+        0 1px 6px rgba(26, 60, 114, 0.06);
+      padding: 20px 28px 24px;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s ease, box-shadow 0.3s ease;
+      cursor: default;
+      user-select: none;
+    }
+
+    .queue-card:hover {
+      box-shadow:
+        0 18px 36px rgba(26, 60, 114, 0.25),
+        0 4px 12px rgba(26, 60, 114, 0.18);
+      transform: translateY(-6px);
+    }
+
+    .queue-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .queue-number {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #2a52be;
+      padding: 6px 16px;
+      border-radius: 30px;
+      background: linear-gradient(135deg, #7cb9e8, #214e91);
+      box-shadow: 0 0 15px rgba(33, 78, 145, 0.5);
+      letter-spacing: 1.5px;
+      user-select: text;
+    }
+
+    .status-badge {
+      padding: 8px 18px;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: white;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      animation: pulse 2.5s infinite ease-in-out alternate;
+      user-select: none;
+      box-shadow: 0 0 8px rgba(0,0,0,0.07);
+    }
+
+    .status-Menunggu {
+      background: #f0a500;
+      box-shadow: 0 0 12px #f0a500aa;
+    }
+
+    .status-Dipanggil {
+      background: #1976d2;
+      box-shadow: 0 0 14px #1976d2aa;
+    }
+
+    .status-Selesai {
+      background: #2e7d32;
+      box-shadow: 0 0 12px #2e7d32aa;
+    }
+
+    .status-Batal {
+      background: #c62828;
+      box-shadow: 0 0 12px #c62828aa;
+    }
+
+    @keyframes pulse {
+      0% {
+        opacity: 0.9;
+      }
+      100% {
+        opacity: 1;
+        box-shadow: 0 0 20px rgba(0,0,0,0.15);
+      }
+    }
+
+    .patient-name {
+      font-size: 1.35rem;
+      font-weight: 600;
+      color: #1a3c72;
+      margin-bottom: 6px;
+      user-select: text;
+    }
+
+    .patient-info {
+      flex-grow: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      row-gap: 10px;
+      column-gap: 20px;
+      font-size: 0.9rem;
+      color: #444;
+    }
+
+    .info-label {
+      font-weight: 600;
+      color: #3a5168;
+    }
+
+    /* Full width info spans */
+    .info-full {
+      grid-column: 1 / -1;
+      color: #555;
+    }
+
+    /* Small QR code container */
+    .qr-code-wrapper {
+      margin-top: 18px;
+      text-align: center;
+      background: #e9f0ff;
+      border-radius: 12px;
+      padding: 12px;
+      box-shadow: inset 0 0 12px #bccfea;
+      user-select: none;
+    }
+
+    .qr-code {
+      width: 110px;
+      height: 110px;
+      display: inline-block;
+      border-radius: 12px;
+      box-shadow: 0 3px 12px rgba(33, 78, 145, 0.3);
+      background: white;
+    }
+
+    /* Tooltip for truncated text */
+    [title] {
+      cursor: help;
+      position: relative;
+    }
+
+    [title]:hover::after {
+      content: attr(title);
+      position: absolute;
+      background: #1a3c72cc;
+      color: white;
+      font-size: 0.85rem;
+      padding: 5px 10px;
+      border-radius: 6px;
+      white-space: nowrap;
+      bottom: 125%;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      pointer-events: none;
+      opacity: 1;
+      transition: opacity 0.2s ease-in-out;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+
+    [title]:hover::before {
+      content: '';
+      position: absolute;
+      bottom: 115%;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 6px;
+      border-style: solid;
+      border-color: #1a3c72cc transparent transparent transparent;
+      z-index: 10;
+      pointer-events: none;
+      opacity: 1;
+      transition: opacity 0.2s ease-in-out;
+    }
+
+    @media (max-width: 450px) {
+      .patient-info {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
