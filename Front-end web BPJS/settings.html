@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Settings Page</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- NAVBAR -->
+  <nav style="position: fixed; top: 0; left: 0; width: 100%; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.6); backdrop-filter: blur(8px); z-index: 1000; box-shadow: 0 2px 6px rgba(0,0,0,0.05);">
+    <div>
+      <img src="img/bpjs.png" alt="BPJS Logo" style="height: 40px; margin-left: 30px;" />
+    </div>
+    <div style="display: flex; align-items: center; gap: 20px; position: relative;">
+      <div style="position: relative;">
+      <button onclick="toggleAppsMenu()" style="background: none; border: none; cursor: pointer;">
+        <svg width="28" height="28" fill="#111827" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="5" cy="5" r="2" />
+          <circle cx="12" cy="5" r="2" />
+          <circle cx="19" cy="5" r="2" />
+          <circle cx="5" cy="12" r="2" />
+          <circle cx="12" cy="12" r="2" />
+          <circle cx="19" cy="12" r="2" />
+          <circle cx="5" cy="19" r="2" />
+          <circle cx="12" cy="19" r="2" />
+          <circle cx="19" cy="19" r="2" />
+        </svg>
+      </button>
+      <div id="appsMenu" style="display: none;position: absolute;top: 48px;right: 0;background: #fff;padding: 20px;border-radius: 16px;box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+        width: 320px;z-index: 2000;display: grid;grid-template-columns: repeat(3, 1fr);gap: 16px;overflow: hidden;">
+        <a href="#jadwal" class="app-link">📅<span>Jadwal</span></a>
+        <a href="#daftar" class="app-link">📝<span>Pendaftaran</span></a>
+        <a href="#dokter" class="app-link">🧑‍⚕️<span>Dokter</span></a>
+        <a href="#obat" class="app-link">💊<span>Apotek</span></a>
+        <a href="#lab" class="app-link">🧪<span>Lab</span></a>
+        <a href="#rawat" class="app-link">🛏️<span>Rawat Inap</span></a>
+        <a href="#medis" class="app-link">📄<span>Rekam Medis</span></a>
+        <a href="form daftar antrian.html" class="app-link">💬<span>Konsultasi</span></a>
+        <a href="#tagihan" class="app-link">💵<span>Pembayaran</span></a>
+      </div>
+    </div>
+      <button onclick="window.location.href='terms.html'" style="background: none; border: none; color: #111827; font-size: 1rem; cursor: pointer; font-weight: 600;">Terms</button>
+      <button onclick="window.location.href='help.html'" style="background: none; border: none; color: #111827; font-size: 1rem; cursor: pointer; font-weight: 600;">Help</button>
+    </div>
+  </nav>
+
+  <script>
+    function toggleAppsMenu() {
+      const menu = document.getElementById("appsMenu");
+      menu.style.display = (menu.style.display === "grid") ? "none" : "grid";
+    }
+    window.addEventListener("click", function (e) {
+      const appsMenu = document.getElementById("appsMenu");
+      const isToggleBtn = e.target.closest("button")?.querySelector("svg");
+      if (
+        appsMenu &&
+        appsMenu.style.display === "grid" &&
+        !appsMenu.contains(e.target) &&
+        !isToggleBtn
+      ) {
+        appsMenu.style.display = "none";
+      }
+    });
+  </script>
+
+
+
+  <!-- HAMBURGER -->
+  <button class="hamburger" onclick="toggleSidebar()">☰</button>
+    <div id="overlay" onclick="toggleSidebar()"></div>
+      <div class="container">
+        <aside id="sidebar" class="sidebar">
+          <div class="user-profile">
+            <img src="https://via.placeholder.com/80" alt="Profile Picture" class="profile-pic" />
+            <h3>John Doe</h3>
+          </div>
+          <nav class="menu">
+            <a href="#profile-settings" class="menu-item active">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 12c2.209 0 4-1.791 4-4s-1.791-4-4-4-4 1.791-4 4 1.791 4 4 4Zm0 2c-2.67 0-8 1.337-8 4v2h16v-2c0-2.663-5.33-4-8-4Z"/></svg>
+              Profile
+            </a>
+            <a href="#privacy" class="menu-item">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 8V7a5 5 0 0 0-10 0v1H5v14h14V8h-2Zm-8-1a3 3 0 0 1 6 0v1H9V7Zm8 13H7V10h10v10Zm-5-3a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"/></svg>
+              Privacy
+            </a>
+            <a href="#histories" class="menu-item">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11 8h2v5h5v2h-7V8Zm1-6C6.48 2 2 6.48 2 12H0l3.89 3.89.07.14L8 12H6c0-4.42 3.58-8 8-8s8 3.58 8 8-3.58 8-8 8a7.947 7.947 0 0 1-6.32-3.16l-1.6 1.2C8.05 21.07 10.91 22 14 22c5.52 0 10-4.48 10-10S19.52 2 12 2Z"/></svg>
+              Histories
+            </a>
+            <a href="#notifications" class="menu-item">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16v-5c0-3.07-1.64-5.64-5-6.32V4a1 1 0 1 0-2 0v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2Zm-6 6a2 2 0 0 0 2-2h-4a2 2 0 0 0 2 2Z"/></svg>
+              Notifications
+            </a>
+            <a href="#security" class="menu-item">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 1 3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4Zm0 2.18L19 6.5v4.5c0 4.4-3.06 8.83-7 9.87-3.94-1.04-7-5.47-7-9.87V6.5l7-3.32Zm0 5.32a3 3 0 0 0-1 5.83V17h2v-2.67a3 3 0 0 0-1-5.83Z"/></svg>
+              Security
+            </a>
+            <a href="#logout" class="menu-item" onclick="logout()">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M16 13v-2H7V8l-5 4 5 4v-3h9Zm-3-9h8v16h-8v2h10V2H13v2Z"/></svg>
+              Logout
+            </a>
+          </nav>
+    </aside>
+
+  <script>
+    function toggleSidebar() {
+      const sidebar = document.getElementById("sidebar");
+      const overlay = document.getElementById("overlay");
+
+      sidebar.classList.toggle("open");
+      overlay.classList.toggle("show");
+    }
+    function logout() {
+      alert("Anda berhasil logout!");
+    }
+    window.addEventListener("click", function (e) {
+      const sidebar = document.getElementById("sidebar");
+      const overlay = document.getElementById("overlay");
+      const toggleBtn = document.querySelector(".hamburger");
+
+      if (
+        overlay.classList.contains("show") &&
+        !sidebar.contains(e.target) &&
+        !toggleBtn.contains(e.target)
+      ) {
+        sidebar.classList.remove("open");
+        overlay.classList.remove("show");
+      }
+    });
+  </script>
+
+    <!-- MAIN CONTENT -->
+    <main class="content">
+      <section>
+        <h2>Settings</h2>
+        <p>Content goes here...</p>
+      </section>
+    </main>
+  </div>
+
+  <!-- STYLE -->
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f8fafc;
+      color: #1f2937;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .container {
+      display: flex;
+      height: 100%;
+      margin-top: 30px;
+    }
+
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: -260px;
+      width: 250px;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.1);
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(8px); 
+      transition: left 0.3s ease;
+      z-index: 1000;
+      padding: 20px;
+    }
+    .sidebar.open {
+      left: 0;
+    }
+    .sidebar .user-profile {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .profile-pic {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+    }
+    .menu-item {
+      display: flex;
+      align-items: center;
+      padding: 10px 0;
+      text-decoration: none;
+      color: #333;
+      font-weight: 500;
+    }
+    .menu-item svg {
+      width: 20px;
+      height: 20px;
+      margin-right: 10px;
+      fill: currentColor;
+    }
+    .menu-item.active {
+      color: #007bff;
+    }
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: none;
+      background: rgba(0,0,0,0.5);
+      z-index: 900;
+    }
+    .overlay.show {
+      display: block;
+    }
+    .user-profile {
+      text-align: center;
+      margin-top: 80px;
+    }
+
+    .profile-pic {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border: 1.5px solid white;
+    }
+
+    .user-profile h3 {
+      margin-top: 15px;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .menu {
+      display: flex;
+      flex-direction: column;
+      margin-top: 20px;
+    }
+
+    .menu-item {
+      padding: 12px 16px;
+      color: #005f9e;
+      text-decoration: none;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    .menu-item:hover {
+      background-color: #3b82f6;
+      color: white;
+      transform: translateX(4px);
+    }
+
+    .menu-item.active {
+      background: linear-gradient(135deg, #005f9e 0%, #3b82f6 80%);
+      color: white;
+    }
+
+    .content {
+      flex: 1;
+      padding: 40px;
+      overflow-y: auto;
+      background-color: #f9fafb;
+      z-index: 1;
+      align-items: center;
+      margin-top: 100px;
+      max-width: 1150px; 
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .content section {
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+      padding: 30px;
+      margin-bottom: 30px;
+      transition: transform 0.2s;
+    }
+
+    .content h2 {
+      font-size: 24px;
+      margin-bottom: 10px;
+      color: #1e40af;
+    }
+
+    .content p {
+      font-size: 16px;
+      color: #4b5563;
+    }
+
+    .hamburger {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      z-index: 1300;
+      cursor: pointer;
+      color: #111;
+    }
+
+    @media (max-width: 768px) {
+      .content {
+        margin-left: 0;
+        padding: 20px;
+      }
+    }
+    .app-link {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 80px;
+      height: 80px;
+      padding: 10px;
+      text-decoration: none;
+      font-size: 0.80rem;
+      border-radius: 12px;
+      color: #111827;
+      background: #f9fafb;
+      transition: background 0.2s ease, transform 0.2s ease;
+      text-align: center;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .app-link:hover {
+      background: #e5e7eb;
+      transform: translateY(-2px);
+    }
+
+    .app-link svg {
+      width: 28px;
+      height: 28px;
+      margin-bottom: 8px;
+    }
+
+  </style>
+</body>
+</html>
