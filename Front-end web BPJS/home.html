@@ -43,7 +43,7 @@
   <div class="container">
     <h1>Rumah Sakit BPJS Kesehatan</h1>
     <p>Melayani Kesehatan Anda dengan Profesional dan Terpercaya</p>
-    <button class="btn-primary" aria-label="Mulai Sekarang">Mulai Sekarang</button>
+    <button class="btn-primary" aria-label="Mulai Sekarang" onclick="window.location.href='settings.html'">Mulai Sekarang</button>
   </div>
 </header>
 
@@ -140,12 +140,12 @@
       e.preventDefault();
       popup.classList.add('active');
       popup.focus();
-      document.body.style.overflow = 'hidden'; // mencegah scroll saat popup aktif
+      document.body.style.overflow = 'hidden';
     });
 
     btnClose.addEventListener('click', () => {
       popup.classList.remove('active');
-      document.body.style.overflow = 'auto'; // aktifkan scroll lagi
+      document.body.style.overflow = 'auto';
     });
 
     popup.addEventListener('click', (e) => {
@@ -154,8 +154,6 @@
         document.body.style.overflow = 'auto';
       }
     });
-
-    // Optional: tutup popup dengan ESC
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && popup.classList.contains('active')) {
         popup.classList.remove('active');
@@ -328,7 +326,7 @@
 
     .btn-primary {
       background: #0056b3;
-      color: #e0f0d9;
+      color: white;
       font-weight: 700;
       padding: 15px 50px;
       border-radius: 35px;
@@ -340,9 +338,9 @@
     }
     .btn-primary:hover {
       background: #0056b3;
-      color: #f0f9ec;
+      color: white;
       transform: scale(1.05);
-      box-shadow: darkgrey;
+      box-shadow: white;
     }
 
     section#features {
