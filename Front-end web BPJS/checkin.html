@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Check-In Konsultasi</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+  <div class="container">
+    <article class="queue-card" tabindex="0" aria-label="Nomor antrian A001, pasien Siti Aminah, status Menunggu">
+      <header class="queue-header">
+        <div class="queue-number" aria-label="Nomor antrian">A001</div>
+        <div class="status-badge status-Menunggu">Menunggu</div>
+      </header>
+      <h2 class="patient-name">Siti Aminah</h2>
+      <section class="patient-info" aria-label="Detail pasien">
+        <div><strong class="info-label">NIK:</strong> 3201123456789012</div>
+        <div><strong class="info-label">Tanggal Lahir:</strong> 12 Jun 1985 00.00</div>
+        <div><strong class="info-label">Jenis Kelamin:</strong> Perempuan</div>
+        <div class="info-full"><strong class="info-label">Alamat:</strong> Jl. Melati No 12, Jakarta</div>
+        <div><strong class="info-label">Kontak:</strong> +628123456789</div>
+        <div><strong class="info-label">Poli Tujuan:</strong> Umum</div>
+        <div><strong class="info-label">Dokter Tujuan:</strong> Dr. Budi Santoso</div>
+        <div><strong class="info-label">Janji Temu:</strong> 28 Jun 2024 10.30</div>
+      </section>
+      <section class="qr-code-wrapper" aria-label="Kode QR atau Token Antrian">
+        <div id="qr-A001" class="qr-code">QR Code</div>
+      </section>
+      <div style="text-align: center;">
+        <button onclick="handleCheckIn()">Check-in Sekarang</button>
+      </div>
+    </article>
+  </div>
+  <script>
+    function handleCheckIn() {
+      window.location.href = 'daftar antrian.html';
+    }
+  </script>
+</body>
+</html>
+<style>
+  body {
+    font-family: "Segoe UI", sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f2f4f7;
+  }
+
+  .container {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 20px;
+  }
+
+  .queue-card {
+    background-color: #ffffff;
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease;
+  }
+
+  .queue-card:focus-within,
+  .queue-card:hover {
+    transform: translateY(-2px);
+  }
+
+  .queue-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  .queue-number {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #1e88e5;
+  }
+
+  .status-badge {
+    padding: 6px 14px;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+
+  .status-Menunggu {
+    background-color: #fff3cd;
+    color: #856404;
+  }
+
+  .patient-name {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 12px 0;
+    color: #333;
+  }
+
+  .patient-info {
+    font-size: 0.95rem;
+    color: #444;
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+
+  .info-label {
+    font-weight: 600;
+    color: #222;
+  }
+
+  .qr-code-wrapper {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+  }
+
+  .qr-code {
+    width: 120px;
+    height: 120px;
+    background-color: #eee;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #888;
+    font-size: 0.9rem;
+  }
+
+  button {
+    background-color: #2e7d32;
+    color: white;
+    padding: 12px 28px;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);
+    transition: background-color 0.2s ease;
+  }
+
+  button:hover {
+    background-color: #256429;
+  }
+</style>

@@ -6,6 +6,7 @@
   <title>Settings Page</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous" defer></script>
   <script src="https://unpkg.com/lucide@latest"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrZj/k7ujTTXRRsw1qmk+ou+77Ibb9Bx1BuU59PZyOQy1nI++r+6bBBLkFkXYQkphVjD6AtIB2B1P8hZKg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -101,7 +102,7 @@
       }
     });
   </script>
-
+  
   <button class="hamburger" onclick="toggleSidebar()">☰</button>
     <div id="overlay" onclick="toggleSidebar()"></div>
       <div class="container">
@@ -117,30 +118,10 @@
               </svg>
               Home
             </a>
-            <a href="#profile-settings" class="menu-item active">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 12c2.209 0 4-1.791 4-4s-1.791-4-4-4-4 1.791-4 4 1.791 4 4 4Zm0 2c-2.67 0-8 1.337-8 4v2h16v-2c0-2.663-5.33-4-8-4Z"/></svg>
-              Profile
-            </a>
-            <a href="#privacy" class="menu-item">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 8V7a5 5 0 0 0-10 0v1H5v14h14V8h-2Zm-8-1a3 3 0 0 1 6 0v1H9V7Zm8 13H7V10h10v10Zm-5-3a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"/></svg>
-              Privacy
-            </a>
-            <a href="#histories" class="menu-item">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11 8h2v5h5v2h-7V8Zm1-6C6.48 2 2 6.48 2 12H0l3.89 3.89.07.14L8 12H6c0-4.42 3.58-8 8-8s8 3.58 8 8-3.58 8-8 8a7.947 7.947 0 0 1-6.32-3.16l-1.6 1.2C8.05 21.07 10.91 22 14 22c5.52 0 10-4.48 10-10S19.52 2 12 2Z"/></svg>
-              Histories
-            </a>
-            <a href="#notifications" class="menu-item">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16v-5c0-3.07-1.64-5.64-5-6.32V4a1 1 0 1 0-2 0v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2Zm-6 6a2 2 0 0 0 2-2h-4a2 2 0 0 0 2 2Z"/></svg>
-              Notifications
-            </a>
-            <a href="#security" class="menu-item">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 1 3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4Zm0 2.18L19 6.5v4.5c0 4.4-3.06 8.83-7 9.87-3.94-1.04-7-5.47-7-9.87V6.5l7-3.32Zm0 5.32a3 3 0 0 0-1 5.83V17h2v-2.67a3 3 0 0 0-1-5.83Z"/></svg>
-              Security
-            </a>
-            <a href="#logout" class="menu-item" onclick="logout()">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M16 13v-2H7V8l-5 4 5 4v-3h9Zm-3-9h8v16h-8v2h10V2H13v2Z"/></svg>
-              Logout
-            </a>
+            <a href="#lihat-obat" class="menu-item active">Lihat Obat</a>
+            <a href="#pesan-obat" class="menu-item">Pesan Obat</a>
+            <a href="#status-pesanan" class="menu-item">Status Pesanan</a>
+            <a href="#riwayat" class="menu-item">Riwayat Pembelian</a>
           </nav>
     </aside>
 
@@ -177,8 +158,8 @@
         <p>Content goes here...</p>
       </section>
     </main>
-  </div>
 
+  </div>
 </body>
 </html>
 <style>
