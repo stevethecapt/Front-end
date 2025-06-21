@@ -4,6 +4,88 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Daftar Antrian Online Rumah Sakit</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: linear-gradient(135deg, #d6e0fd, #f9fbff);
+      font-family: 'Poppins', sans-serif;
+      color: #222;
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    header {
+      font-size: 2.4rem;
+      font-weight: 700;
+      color: #1a3c72;
+      text-align: center;
+      margin-bottom: 40px;
+      text-shadow: 0 1px 3px rgba(26, 60, 114, 0.4);
+    }
+
+    main {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .current-queue, .queue-card {
+      background: white;
+      border-left: 6px solid #1976d2;
+      border-radius: 12px;
+      box-shadow: 0 4px 14px rgba(26, 60, 114, 0.12);
+      padding: 16px 24px;
+      margin-bottom: 24px;
+      font-size: 1rem;
+      color: #1a3c72;
+    }
+
+    .current-queue h2,
+    .queue-card h2 {
+      margin-top: 0;
+      font-size: 1.2rem;
+      color: #1976d2;
+      margin-bottom: 8px;
+    }
+
+    .current-number {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #2a52be;
+      background: linear-gradient(135deg, #7cb9e8, #214e91);
+      padding: 4px 20px;
+      border-radius: 30px;
+      display: inline-block;
+      margin-top: 4px;
+      box-shadow: 0 0 15px rgba(33, 78, 145, 0.5);
+    }
+
+    .queue-number {
+      font-size: 2rem;
+      font-weight: bold;
+      padding: 4px 20px;
+      border-radius: 30px;
+      display: inline-block;
+      margin-bottom: 8px;
+    }
+
+    .queue-number.next-patient {
+      background-color: #f0a500 !important;
+      box-shadow: 0 0 12px #f0a500aa !important;
+      color: white;
+    }
+
+    .patient-name {
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin: 0;
+    }
+  </style>
 </head>
 <body>
   <header>Daftar Antrian Online Rumah Sakit</header>
@@ -12,7 +94,6 @@
     <div class="queue-cards" id="queueCardsContainer" aria-label="Daftar antrian pasien rumah sakit"></div>
   </main>
 
-  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
   <script>
     const queueData = [
       {
@@ -35,40 +116,31 @@
       },
       {
         nomorAntrian: "B102",
-        namaLengkap: "Rudi Hartono",
-        nik: "",
-        tanggalLahir: "1990-11-05",
-        jenisKelamin: "Laki-laki",
-        alamat: "Jl. Kenanga 45, Bandung",
-        nomorKontak: "+628987654321",
-        nomorRekamMedis: "",
-        keluhanUtama: "",
-        poliTujuan: "Gigi",
-        dokterTujuan: "Drg. Maria Febriani",
-        tanggalJanji: "2024-06-28T09:00",
-        metodePembayaran: "Pribadi",
-        statusAntrian: "Menunggu",
-        waktuPendaftaran: "2024-06-25 09:05:10",
-        token: "B102-RH1990"
+        namaLengkap: "Rudi Hartono"
       }
     ];
 
     function formatDateTime(dateStr) {
       const d = new Date(dateStr);
       if (isNaN(d)) return "-";
-      return d.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }) + ' ' +
-             d.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+      return d.toLocaleDateString('id-ID', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric'
+      }) + ' ' + d.toLocaleTimeString('id-ID', {
+        hour: '2-digit',
+        minute: '2-digit'
+      });
     }
 
     function escapeHtml(text) {
-      return text.replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
-    }
-
-    function createTruncatedText(text, maxLength) {
-      if (!text) return "-";
-      if (text.length <= maxLength) return escapeHtml(text);
-      const truncated = escapeHtml(text.slice(0, maxLength - 3)) + '...';
-      return `<span title="${escapeHtml(text)}">${truncated}</span>`;
+      return text.replace(/[&<>"']/g, m => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+      }[m]));
     }
 
     function renderQueueCards() {
@@ -82,185 +154,38 @@
         currentQueue.innerHTML = `
           <h2>Sedang Dilayani</h2>
           <div>Nomor Antrian: <span class="current-number">${escapeHtml(current.nomorAntrian)}</span></div>
-          <div>Status: <strong>${escapeHtml(current.statusAntrian)}</strong></div>
-          <div>Pasien: <strong>${escapeHtml(current.namaLengkap)}</strong></div>
+          <div>Nama Pasien: <strong>${escapeHtml(current.namaLengkap)}</strong></div>
+          <div>NIK: ${escapeHtml(current.nik)}</div>
+          <div>Tanggal Lahir: ${formatDateTime(current.tanggalLahir)}</div>
+          <div>Jenis Kelamin: ${escapeHtml(current.jenisKelamin)}</div>
+          <div>Alamat: ${escapeHtml(current.alamat)}</div>
+          <div>Nomor Kontak: ${escapeHtml(current.nomorKontak)}</div>
+          <div>Nomor Rekam Medis: ${escapeHtml(current.nomorRekamMedis)}</div>
+          <div>Keluhan Utama: ${escapeHtml(current.keluhanUtama)}</div>
+          <div>Poli Tujuan: ${escapeHtml(current.poliTujuan)}</div>
+          <div>Dokter Tujuan: ${escapeHtml(current.dokterTujuan)}</div>
+          <div>Janji Temu: ${formatDateTime(current.tanggalJanji)}</div>
+          <div>Metode Pembayaran: ${escapeHtml(current.metodePembayaran)}</div>
+          <div>Waktu Pendaftaran: ${escapeHtml(current.waktuPendaftaran)}</div>
         `;
       } else {
         currentQueue.innerHTML = `<h2>Tidak Ada Pasien yang Sedang Dilayani</h2>`;
       }
-      queueData.forEach(data => {
+
+      const next = queueData.find(q => !q.statusAntrian);
+      if (next) {
         const card = document.createElement('article');
         card.className = 'queue-card';
         card.innerHTML = `
-          <header class="queue-header">
-            <div class="queue-number">${escapeHtml(data.nomorAntrian)}</div>
-            <div class="status-badge status-${escapeHtml(data.statusAntrian)}">${escapeHtml(data.statusAntrian)}</div>
-          </header>
-          <h2 class="patient-name">${escapeHtml(data.namaLengkap)}</h2>
-          <section class="patient-info">
-            <div><strong class="info-label">NIK:</strong> ${createTruncatedText(data.nik || '-', 21)}</div>
-            <div><strong class="info-label">Tanggal Lahir:</strong> ${formatDateTime(data.tanggalLahir)}</div>
-            <div><strong class="info-label">Jenis Kelamin:</strong> ${escapeHtml(data.jenisKelamin)}</div>
-            <div class="info-full"><strong class="info-label">Alamat:</strong> ${createTruncatedText(data.alamat, 50)}</div>
-            <div><strong class="info-label">Kontak:</strong> ${escapeHtml(data.nomorKontak)}</div>
-            <div><strong class="info-label">Nomor Rekam Medis:</strong> ${createTruncatedText(data.nomorRekamMedis || '-', 20)}</div>
-            <div class="info-full"><strong class="info-label">Keluhan Utama:</strong> ${createTruncatedText(data.keluhanUtama || '-', 70)}</div>
-            <div><strong class="info-label">Poli Tujuan:</strong> ${escapeHtml(data.poliTujuan)}</div>
-            <div><strong class="info-label">Dokter Tujuan:</strong> ${escapeHtml(data.dokterTujuan)}</div>
-            <div><strong class="info-label">Janji Temu:</strong> ${formatDateTime(data.tanggalJanji)}</div>
-            <div><strong class="info-label">Metode Pembayaran:</strong> ${escapeHtml(data.metodePembayaran)}</div>
-            <div><strong class="info-label">Waktu Pendaftaran:</strong> ${escapeHtml(data.waktuPendaftaran)}</div>
-          </section>
-          <section class="qr-code-wrapper">
-            <div id="qr-${data.nomorAntrian}" class="qr-code"></div>
-          </section>
+          <h2>Pasien Selanjutnya</h2>
+          <div class="queue-number next-patient">${escapeHtml(next.nomorAntrian)}</div>
+          <div class="patient-name">${escapeHtml(next.namaLengkap)}</div>
         `;
         container.appendChild(card);
-        if (data.token) {
-          const qrDiv = document.getElementById(`qr-${data.nomorAntrian}`);
-          if (qrDiv) {
-            QRCode.toCanvas(qrDiv, data.token, { width: 110, margin: 0 }, error => {
-              if (error) console.error(error);
-            });
-          }
-        }
-      });
+      }
     }
+
     document.addEventListener('DOMContentLoaded', renderQueueCards);
   </script>
 </body>
 </html>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
-  * {
-    box-sizing: border-box;
-  }
-  body {
-    margin: 0;
-    background: linear-gradient(135deg, #d6e0fd, #f9fbff);
-    font-family: 'Poppins', sans-serif;
-    color: #222;
-    min-height: 100vh;
-    padding: 40px 20px;
-  }
-  header {
-    font-size: 2.4rem;
-    font-weight: 700;
-    color: #1a3c72;
-    text-align: center;
-    margin-bottom: 40px;
-    text-shadow: 0 1px 3px rgba(26, 60, 114, 0.4);
-  }
-  main {
-    max-width: 1100px;
-    margin: 0 auto;
-  }
-  .current-queue {
-    background: white;
-    border-left: 6px solid #1976d2;
-    border-radius: 12px;
-    box-shadow: 0 4px 14px rgba(26, 60, 114, 0.12);
-    padding: 16px 24px;
-    margin-bottom: 36px;
-    font-size: 1rem;
-    color: #1a3c72;
-  }
-  .current-queue h2 {
-    margin-top: 0;
-    font-size: 1.2rem;
-    color: #1976d2;
-    margin-bottom: 8px;
-  }
-  .current-queue .current-number {
-    font-size: 2rem;
-    font-weight: bold;
-    color: #2a52be;
-    background: linear-gradient(135deg, #7cb9e8, #214e91);
-    padding: 4px 20px;
-    border-radius: 30px;
-    display: inline-block;
-    margin-top: 4px;
-    box-shadow: 0 0 15px rgba(33, 78, 145, 0.5);
-  }
-
-  .queue-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 24px;
-  }
-  .queue-card {
-    background: white;
-    border-radius: 16px;
-    box-shadow: 0 8px 24px rgba(26, 60, 114, 0.1), 0 1px 6px rgba(26, 60, 114, 0.06);
-    padding: 20px 28px 24px;
-    display: flex;
-    flex-direction: column;
-  }
-  .queue-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 14px;
-  }
-  .queue-number {
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: #2a52be;
-    padding: 6px 16px;
-    border-radius: 30px;
-    background: linear-gradient(135deg, #7cb9e8, #214e91);
-    box-shadow: 0 0 15px rgba(33, 78, 145, 0.5);
-  }
-  .status-badge {
-    padding: 8px 18px;
-    border-radius: 50px;
-    font-weight: 600;
-    font-size: 0.9rem;
-    color: white;
-    text-transform: uppercase;
-    animation: pulse 2.5s infinite ease-in-out alternate;
-  }
-  .status-Menunggu { background: #f0a500; box-shadow: 0 0 12px #f0a500aa; }
-  .status-Dipanggil { background: #1976d2; box-shadow: 0 0 14px #1976d2aa; }
-  .status-Selesai { background: #2e7d32; box-shadow: 0 0 12px #2e7d32aa; }
-  .status-Batal { background: #c62828; box-shadow: 0 0 12px #c62828aa; }
-  @keyframes pulse {
-    0% { opacity: 0.9; }
-    100% { opacity: 1; box-shadow: 0 0 20px rgba(0,0,0,0.15); }
-  }
-  .patient-name {
-    font-size: 1.35rem;
-    font-weight: 600;
-    color: #1a3c72;
-    margin-bottom: 6px;
-  }
-  .patient-info {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px 20px;
-    font-size: 0.9rem;
-    color: #444;
-  }
-  .info-label {
-    font-weight: 600;
-    color: #3a5168;
-  }
-  .info-full { grid-column: 1 / -1; color: #555; }
-  .qr-code-wrapper {
-    margin-top: 18px;
-    text-align: center;
-    background: #e9f0ff;
-    border-radius: 12px;
-    padding: 12px;
-    box-shadow: inset 0 0 12px #bccfea;
-  }
-  .qr-code {
-    width: 110px;
-    height: 110px;
-    border-radius: 12px;
-    background: white;
-  }
-  @media (max-width: 450px) {
-    .patient-info { grid-template-columns: 1fr; }
-  }
-</style>
